@@ -1,0 +1,19 @@
+.PHONY: help run
+
+help:
+	@echo "Usage: make [target]"
+	@echo "make build"
+	@echo "	builds docker image 'scrape'"
+
+all:
+	make build
+	make serve
+
+build:
+	docker build -t scrape .
+
+serve:
+	@echo "Open the server at http://localhost:8080/docs for a schema"
+	@echo "Open http://localhost:8080/scrape/id where id is a goodreads book id,"
+	@echo "E.g. http://localhost:8080/scrape/9076975"
+	docker run --rm -p 8080:8080 scrape --project=. scrape.jl
