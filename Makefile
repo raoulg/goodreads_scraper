@@ -1,3 +1,4 @@
+.DEFAULT_GOAL := all
 .PHONY: help run
 
 help:
@@ -16,4 +17,8 @@ serve:
 	@echo "Open the server at http://localhost:8080/docs for a schema"
 	@echo "Open http://localhost:8080/scrape/id where id is a goodreads book id,"
 	@echo "E.g. http://localhost:8080/scrape/9076975"
-	docker run --rm -p 8080:8080 scrape --project=. scrape.jl
+	@echo "test healt at http://localhost:8080/health"
+	docker run --rm \
+		-p 8080:8080 \
+		-v $$(pwd)/data:/app/data scrape \
+		--project=. scrape.jl

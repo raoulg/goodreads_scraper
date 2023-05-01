@@ -1,6 +1,6 @@
 FROM julia:1.8.5
 
-COPY scrape.jl /app/
+COPY *.jl /app/
 COPY *.toml /app/
 WORKDIR /app/
 
