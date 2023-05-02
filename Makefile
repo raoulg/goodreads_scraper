@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := all
-.PHONY: help run
+.PHONY: help all build serve key
 
 help:
 	@echo "Usage: make [target]"
@@ -7,8 +7,21 @@ help:
 	@echo "	builds docker image 'scrape'"
 
 all:
+	make key
 	make build
 	make serve
+
+
+key: ENV.txt
+
+ENV.txt:
+	@echo "Enter the value for OPENAI_KEY (input will be hidden):"
+	@stty -echo
+	@read OPENAI_KEY; \
+	stty echo; \
+	echo "OPENAI_KEY=$$OPENAI_KEY" > ENV.txt
+	@echo "ENV.txt file has been created with the provided OPENAI_KEY value."
+
 
 build:
 	docker build -t scrape .
