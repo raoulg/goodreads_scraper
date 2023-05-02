@@ -1,0 +1,12 @@
+{
+  "name": "lambda-container-node",
+  "version": "1.0.0",
+  "description": "Node.js Lambda function inside a container",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1369.0"
+  }
+}
