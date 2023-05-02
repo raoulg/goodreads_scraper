@@ -2,7 +2,7 @@
 
 julia_version = "1.8.5"
 manifest_format = "2.0"
-project_hash = "0758ece3a36febdf77da45a8e7773ff61f174aa7"
+project_hash = "f1612f5958f2ec116713b80ba213f221b21693d6"
 
 [[deps.AbstractTrees]]
 git-tree-sha1 = "faa260e4cb5aba097a73fab382dd4b5819d8ec8c"
@@ -144,6 +144,12 @@ version = "2022.2.1"
 [[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 version = "1.2.0"
+
+[[deps.OpenAI]]
+deps = ["HTTP", "JSON3"]
+git-tree-sha1 = "625c266994badbc323f96e769cc471cb9cfa7c34"
+uuid = "e9f21f70-7185-4079-aca2-91159181367c"
+version = "0.8.3"
 
 [[deps.OpenSSL]]
 deps = ["BitFlags", "Dates", "MozillaCACerts_jll", "OpenSSL_jll", "Sockets"]
