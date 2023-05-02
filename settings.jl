@@ -16,5 +16,18 @@ settings = Settings(
     ".Text.H1Title",
     5,
     "data",
-    2500,
+    1500,
 )
+
+struct Model
+    gptmodel::String
+    prompt::String
+end
+
+modelsettings = Model(
+    "gpt-3.5-turbo",
+    "CHUNK \n can you summarize these reviews into a single abstract of the book? What is the general sentiment, why, and is it advised?"
+)
+
+@info "Loaded settings..."
+
