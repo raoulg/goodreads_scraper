@@ -87,9 +87,8 @@ function main(req, id)
     reviews, title = retry_if_empty(scrape_reviews, id, settings)
     chunks = chunk_reviews(reviews, settings)
     summary = loop_chunks(chunks, modelsettings)
-    save_summary_to_file(summary, title, settings)
-
-    println("Reviews saved to disk!")
+    # save_summary_to_file(summary, title, settings)
+    return summary
 end
 
 
