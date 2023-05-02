@@ -1,6 +1,21 @@
-# Use Lambda specific node image
-FROM public.ecr.aws/lambda/nodejs:16
+FROM julia:1.8.5
 
-COPY index.js ${LAMBDA_TASK_ROOT}
+RUN curl -Lo /usr/local/bin/aws-lambda-rie \
+    https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie \
+    && chmod +x /usr/local/bin/aws-lambda-rie
 
-CMD [ "index.handler" ]
+COPY *.jl /app/
+COPY *.toml /app/
+COPY bootstrap /app/
+
+WORKDIR /app/
+
+RUN julia -e 'using Pkg; \
+             Pkg.activate("."); \
+             Pkg.instantiate();'
+RUN chmod +x /app/bootstrap
+
+EXPOSE 8080
+
+# ENTRYPOINT [ "julia" ]
+ENTRYPOINT [ "/app/bootstrap" ]

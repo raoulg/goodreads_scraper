@@ -1,7 +1,6 @@
 using HTTP
 using Gumbo
 using Cascadia
-# using Oxygen
 include("settings.jl")
 include("gpt.jl")
 
@@ -19,7 +18,7 @@ function scrape_reviews(id::String, settings::Settings)::Tuple{Vector{String}, S
         selector = Selector(settings.element)
         matched_elements = eachmatch(selector, doc.root)
         titles = eachmatch(Selector(settings.title), doc.root)
-        isempty(titles) ? t = "0" : t = replace(nodeText(titles[1]), r" |:" => "")
+        isempty(titles) ? t = "0" : t = replace(nodeText(titles[1]), r" |:|'" => "")
         for el in matched_elements
             txt = nodeText(el)
             push!(reviews, txt)
@@ -75,8 +74,13 @@ function save_reviews_to_file(id, chunks, settings)
 end
 
 function save_summary_to_file(summary, title, settings)
-    fname = settings.datadir * "/summary_$(title).txt"
+    if !isdir(settings.datadir)
+        @info "$(settings.datadir) does not exist in $pwd(), creating..."
+        mkdir(settings.datadir)
+    end
+    fname = joinpath(settings.datadir, "summary_$(title).txt")
     @info "Writing $fname to disk"
+    
     open(fname, "w") do io
         write(io, summary)
     end
@@ -87,7 +91,7 @@ function main(id)
     reviews, title = retry_if_empty(scrape_reviews, id, settings)
     chunks = chunk_reviews(reviews, settings)
     summary = loop_chunks(chunks, modelsettings)
-    # save_summary_to_file(summary, title, settings)
+    "--save" in ARGS ? save_summary_to_file(summary, title, settings) : @info "Add --save to save summary to disk"
     return summary
 end
 
