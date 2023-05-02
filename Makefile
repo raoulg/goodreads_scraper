@@ -32,6 +32,7 @@ serve:
 	@echo "E.g. http://localhost:8080/scrape/9076975"
 	@echo "test healt at http://localhost:8080/health"
 	docker run --rm \
+		--env-file ENV.txt \
 		-p 8080:8080 \
 		-v $$(pwd)/data:/app/data scrape \
 		--project=. scrape.jl
