@@ -1,4 +1,4 @@
-.DEFAULT_GOAL := all
+.DEFAULT_GOAL := key
 .PHONY: help all build serve key
 
 help:

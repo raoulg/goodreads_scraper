@@ -1,7 +1,7 @@
 using HTTP
 using Gumbo
 using Cascadia
-using Oxygen
+# using Oxygen
 include("settings.jl")
 include("gpt.jl")
 
@@ -64,7 +64,7 @@ function chunk_reviews(reviews::Vector{String}, settings::Settings)::Vector{Stri
     return chunks
 end
 
-function save_reviews_to_file(id, reviews, settings)
+function save_reviews_to_file(id, chunks, settings)
     for (index, chunk) in enumerate(chunks)
         fname = settings.datadir * "/review_$(id)_$(index).txt"
         @info "Writing $fname to disk"
@@ -83,7 +83,7 @@ function save_summary_to_file(summary, title, settings)
 end
 
 
-function main(req, id)
+function main(id)
     reviews, title = retry_if_empty(scrape_reviews, id, settings)
     chunks = chunk_reviews(reviews, settings)
     summary = loop_chunks(chunks, modelsettings)
@@ -92,6 +92,6 @@ function main(req, id)
 end
 
 
-@get "/scrape/{id}" main
-@get "/health" () -> "running!"
-serve(host="0.0.0.0")
+# @get "/scrape/{id}" main
+# @get "/health" () -> "running!"
+# serve(host="0.0.0.0")

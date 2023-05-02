@@ -12,7 +12,7 @@ function handler(event, context)
     id = match(r"/scrape/(\w+)", path).captures[1]
 
     # Call your main function with the required arguments
-    summary = main(nothing, id)
+    summary = main(id)
 
     # Create the response
     response = Dict(
