@@ -88,7 +88,7 @@ end
 
 
 function main(id)
-    reviews, title = retry_if_empty(scrape_reviews, id, settings)
+    reviews, title = retry_if_empty(scrape_reviews, String(id), settings)
     chunks = chunk_reviews(reviews, settings)
     summary = loop_chunks(chunks, modelsettings)
     "--save" in ARGS ? save_summary_to_file(summary, title, settings) : @info "Add --save to save summary to disk"
