@@ -4,8 +4,8 @@ set -euo pipefail
 while true; do
   HEADERS="$(mktemp)"
   # Get an event from the Lambda RIE
-  echo "Event data: $EVENT_DATA"
   EVENT_DATA=$(curl -sS -LD "$HEADERS" -X GET "http://localhost:9001/2018-06-01/runtime/invocation/next")
+  echo "Event data: $EVENT_DATA"
 
   INVOCATION_ID=$(grep -Fi Lambda-Runtime-Aws-Request-Id "$HEADERS" | tr -d '[:space:]' | cut -d: -f2)
 
