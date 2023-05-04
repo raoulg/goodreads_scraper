@@ -15,9 +15,13 @@ function handler(event::AbstractDict)
     headers = Dict(
         "Access-Control-Allow-Origin" => "*",
         "Access-Control-Allow-Headers" => "Content-Type",
-        "Access-Control-Allow-Methods" => "OPTIONS, POST"
+        "Access-Control-Allow-Methods" => "OPTIONS, POST",
     )
-    return Dict("statusCode" => 200, "headers" => headers, "body" => Dict("number" => number, "summary" => summary))
+    return Dict(
+        "statusCode" => 200,
+        "headers" => headers,
+        "body" => Dict("number" => number, "summary" => summary),
+    )
 end
 
 function process_event(event_data::String)
@@ -34,7 +38,7 @@ function main(args)
             response = HTTP.request("GET", NEXT_INVOCATION_URL)
 
             # Convert headers to a dictionary
-            headers_dict = Dict{String, String}(response.headers)
+            headers_dict = Dict{String,String}(response.headers)
 
             # Get the request ID
             request_id = headers_dict["Lambda-Runtime-Aws-Request-Id"]
@@ -47,7 +51,7 @@ function main(args)
             HTTP.request("POST", response_url, [], response_body)
 
         catch e
-            @error "Error processing event" exception=(e, catch_backtrace())
+            @error "Error processing event" exception = (e, catch_backtrace())
         end
     end
 end
