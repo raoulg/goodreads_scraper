@@ -26,6 +26,7 @@ ENV.txt:
 build:
 	docker build -t scrape .
 
+
 serve:
 	@echo "Open the server at http://localhost:8080/docs for a schema"
 	@echo "Open http://localhost:8080/scrape/id where id is a goodreads book id,"

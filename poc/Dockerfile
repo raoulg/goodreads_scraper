@@ -1,6 +1,5 @@
 FROM julia:latest
 
-
 # Install RIE
 RUN apt-get update && \
     apt-get install -y unzip && \
@@ -8,12 +7,14 @@ RUN apt-get update && \
     chmod +x aws-lambda-rie && \
     mv aws-lambda-rie /usr/local/bin/
 
-# copy app files
+# Copy the app files
 COPY *.jl /app/
 COPY *.toml /app/
 
-WORKDIR /app/
+# Set up the working directory
+WORKDIR /app
 
+# Install Julia dependencies
 RUN julia -e 'using Pkg; \
              Pkg.activate("."); \
              Pkg.instantiate();'

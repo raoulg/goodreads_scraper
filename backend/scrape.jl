@@ -1,14 +1,17 @@
 using HTTP
 using Gumbo
 using Cascadia
+using Logging
+Logging.global_logger(ConsoleLogger(stderr, Logging.Info))
+
 include("settings.jl")
 include("gpt.jl")
 
-function scrape_reviews(id::String, settings::Settings)::Tuple{Vector{String}, String}
+function scrape_reviews(id::String, settings::Settings)::Tuple{Vector{String},String}
     url = settings(id)
     @info "start get request for $url"
 
-    response = HTTP.get(url; readtimeout=10)
+    response = HTTP.get(url; readtimeout = 10)
     @info "finished response"
     reviews = String[]
     if response.status == 200
@@ -80,22 +83,20 @@ function save_summary_to_file(summary, title, settings)
     end
     fname = joinpath(settings.datadir, "summary_$(title).txt")
     @info "Writing $fname to disk"
-    
+
     open(fname, "w") do io
         write(io, summary)
     end
 end
 
-
-function main(id)
+function main(id::String)::String
+    println("println start")
+    @info "starting main"
     reviews, title = retry_if_empty(scrape_reviews, id, settings)
     chunks = chunk_reviews(reviews, settings)
     summary = loop_chunks(chunks, modelsettings)
-    "--save" in ARGS ? save_summary_to_file(summary, title, settings) : @info "Add --save to save summary to disk"
+    "--save" in ARGS ? save_summary_to_file(summary, title, settings) :
+    @info "Add --save to save summary to disk"
+    @info "Summary created: $summary"
     return summary
 end
-
-
-# @get "/scrape/{id}" main
-# @get "/health" () -> "running!"
-# serve(host="0.0.0.0")
