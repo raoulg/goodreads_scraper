@@ -10,8 +10,7 @@ const INVOCATION_RESPONSE_URL = "http://$LAMBDA_RUNTIME_API/2018-06-01/runtime/i
 
 function handler(event::AbstractDict)
     number = event["number"]
-    # summary = main(string(number))
-    summary = "test"
+    summary = main(string(number))
     headers = Dict(
         "Access-Control-Allow-Origin" => "*",
         "Access-Control-Allow-Headers" => "Content-Type",
