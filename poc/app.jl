@@ -6,9 +6,8 @@ const NEXT_INVOCATION_URL = "http://$LAMBDA_RUNTIME_API/2018-06-01/runtime/invoc
 const INVOCATION_RESPONSE_URL = "http://$LAMBDA_RUNTIME_API/2018-06-01/runtime/invocation"
 
 function handler(event::AbstractDict)
-    println("Event in handler:", event)
-    response = "Hello from Julia on AWS Lambda!"
-    return Dict("statusCode" => 200, "body" => response)
+    number = event["number"]
+    return Dict("statusCode" => 200, "body" => number)
 end
 
 function process_event(event_data::String)

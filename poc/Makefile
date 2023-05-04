@@ -6,7 +6,7 @@ build:
 test: build
 	docker run -d --rm --name julia-lambda-docker-instance -p 8080:8080 -e AWS_EXECUTION_ENV=AWS_Lambda_julia julia-lambda-docker
 	sleep 2
-	curl -X POST "http://localhost:8080/2015-03-31/functions/function/invocations" -d '{}'
+	curl -X POST "http://localhost:8080/2015-03-31/functions/function/invocations" -d '{"number": 42}'
 	docker stop julia-lambda-docker-instance
 
 interactive: build
