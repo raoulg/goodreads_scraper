@@ -1,6 +1,9 @@
 using HTTP
 using Gumbo
 using Cascadia
+using Logging
+Logging.global_logger(ConsoleLogger(stderr, Logging.Info))
+
 include("settings.jl")
 include("gpt.jl")
 
@@ -86,16 +89,13 @@ function save_summary_to_file(summary, title, settings)
     end
 end
 
-
-function main(id)
-    reviews, title = retry_if_empty(scrape_reviews, String(id), settings)
+function main(id::String)::String
+    println("println start")
+    @info "starting main"
+    reviews, title = retry_if_empty(scrape_reviews, id, settings)
     chunks = chunk_reviews(reviews, settings)
     summary = loop_chunks(chunks, modelsettings)
     "--save" in ARGS ? save_summary_to_file(summary, title, settings) : @info "Add --save to save summary to disk"
+    @info "Summary created: $summary"
     return summary
 end
-
-
-# @get "/scrape/{id}" main
-# @get "/health" () -> "running!"
-# serve(host="0.0.0.0")
