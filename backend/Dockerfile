@@ -1,14 +1,16 @@
 FROM julia:latest
 
 
-RUN curl -Lo /usr/local/bin/aws-lambda-rie \
-    https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie \
-    && chmod +x /usr/local/bin/aws-lambda-rie
+# Install RIE
+RUN apt-get update && \
+    apt-get install -y unzip && \
+    curl -Lo aws-lambda-rie https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie && \
+    chmod +x aws-lambda-rie && \
+    mv aws-lambda-rie /usr/local/bin/
 
+# copy app files
 COPY *.jl /app/
 COPY *.toml /app/
-COPY bootstrap /app/
-COPY entrypoint.sh /app/
 
 WORKDIR /app/
 
@@ -16,12 +18,5 @@ RUN julia -e 'using Pkg; \
              Pkg.activate("."); \
              Pkg.instantiate();'
 
-RUN chmod +x /app/bootstrap
-RUN chmod +x /app/entrypoint.sh
-
-EXPOSE 8080
-
-# ENTRYPOINT [ "julia" ]
-# ENTRYPOINT [ "/app/bootstrap" ]
-# ENTRYPOINT [ "/usr/local/bin/aws-lambda-rie", "/app/bootstrap" ]
-ENTRYPOINT [ "/app/entrypoint.sh" ]
+# Set the entry point to use the RIE
+ENTRYPOINT [ "/usr/local/bin/aws-lambda-rie", "julia", "--project", "app.jl" ]
