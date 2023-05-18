@@ -1,3 +1,4 @@
 /data/*.txt
 node_modules/
 ENV.txt
+*/venv/
